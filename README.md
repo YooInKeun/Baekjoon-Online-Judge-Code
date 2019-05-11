@@ -1,6 +1,6 @@
 # Baekjoon-Online-Judge-Code
 
-Coding Test Practice on BOJ with C++
+Coding Test Training on BOJ with C++
 --------------------------------------------------
 
 ### 커밋 내용
