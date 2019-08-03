@@ -8,9 +8,7 @@ Coding Test Training on BOJ with C++
 ```
 1. BOJ 단계별 문제
 
-2. BOJ n과 m 문제(Brute Force Practice)
-
-3. BOJ 분류별 문제 : Brute Force, Dynamic Programming, Graph, BFS, DFS, Tree, Simulation 등
+2. BOJ 분류별 문제 : Brute Force, Dynamic Programming, Graph, BFS, DFS, Tree, Simulation 등
 ```
 
 ### 커밋 규칙
