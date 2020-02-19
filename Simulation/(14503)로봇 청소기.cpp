@@ -37,6 +37,7 @@ d가 0인 경우에는 북쪽을, 1인 경우에는 동쪽을, 2인 경우에는 남쪽을, 3인 경우에는 
 1 1 1
 1 0 1
 1 1 1
+
 예제 출력 1
 1
 
@@ -54,6 +55,7 @@ d가 0인 경우에는 북쪽을, 1인 경우에는 동쪽을, 2인 경우에는 남쪽을, 3인 경우에는 
 1 0 0 0 0 0 1 1 0 1
 1 0 0 0 0 0 0 0 0 1
 1 1 1 1 1 1 1 1 1 1
+
 예제 출력 2
 57
 */
@@ -67,118 +69,138 @@ using namespace std;
 
 int main() {
 	int n, m;
-	int r, c, dir, x, y;
+	int r, c, d, x, y;
 	int coord[50][50];
-	int cnt = 0;
+	int cnt = 0, roundCnt = 0;
 
 	scanf("%d %d", &n, &m);
-	scanf("%d %d %d", &r, &c, &dir);
-	x = c - 1;
-	y = m - r;
+	scanf("%d %d %d", &r, &c, &d);
+	x = c;
+	y = n - r - 1;
 
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
 			scanf("%d", &coord[i][j]);
 		}
 	}
 
-	while (1) {
-		if (coord[x][y] == 0) {
-			coord[x][y] = 1;
-			cnt++;
+	coord[x][y] = 1;
+	cnt++;
+	printf("(%d, %d)", x, y);
+	while (true) {
+		if (roundCnt == 4) {
+			if (d == 0) {
+				if (y - 1 >= 0 && coord[x][y - 1] != 1) {
+					y--;
+					roundCnt = 0;
+				}
+				else {
+					break;
+				}
+			}
+			else if (d == 1) {
+				if (x - 1 >= 0 && coord[x - 1][y] != 1) {
+					x--;
+					roundCnt = 0;
+				}
+				else {
+					break;
+				}
+			}
+			else if (d == 2) {
+				if (y + 1 < n && coord[x][y + 1] != 1) {
+					y++;
+					roundCnt = 0;
+				}
+				else {
+					break;
+				}
+			}
+			else if (d == 3) {
+				if (x + 1 < m && coord[x + 1][y] != 1) {
+					x++;
+					roundCnt = 0;
+				}
+				else {
+					break;
+				}
+			}
 		}
-		else {
-			if (dir == 0) {
-				if (x-1 >= 0) {
-					if (coord[x - 1][y] == 0) {
-						coord[x - 1][y] = 1;
-						dir = 3;
-						cnt++;
 
-						x -= 1;
-					}
-
-					else {
-						dir = 3;
-					}
-				}
-
-				else {
-					dir = 3;
-				}
-			}
-			else if (dir == 1) {
-				if (y + 1 < m) {
-					if (coord[x][y + 1] == 0) {
-						coord[x][y + 1] = 1;
-						dir = 0;
-						cnt++;
-
-						y += 1;
-					}
-
-					else {
-						dir = 0;
-					}
+		if (d == 0) {
+			if (x - 1 >= 0) {
+				if (coord[x - 1][y] == 0) {
+					d = 3;
+					x--;
+					coord[x][y] = -1;
+					cnt++;
+					printf("(%d, %d)", x, y);
 				}
 				else {
-					dir = 0;
-				}
-			}
-			else if (dir == 2) {
-				if (x + 1 < n) {
-					if (coord[x + 1][y] == 0) {
-						coord[x + 1][y] = 1;
-							dir = 1;
-							cnt++;
-
-							x += 1;
-					}
-
-					else {
-						dir = 1;
-					}
-				}
-
-				else {
-					dir = 1;
-				}
-			}
-			else if (dir == 3) {
-				if (y - 1 >= 0) {
-					if (coord[x][y - 1] == 0) {
-						coord[x][y - 1] = 1;
-						dir = 2;
-						cnt++;
-
-						y -= 1;
-					}
-
-					else {
-						dir = 2;
-					}
-				}
-				else {
-					dir = 2;
+					d = 3;
+					roundCnt++;
 				}
 			}
 			else {
-				if (dir == 0) {
-					y -= 1;
+				d = 3;
+				roundCnt++;
+			}
+		}
+		else if (d == 1) {
+			if (y + 1 < n) {
+				if (coord[x][y + 1] == 0) {
+					d = 0;
+					y++;
+					coord[x][y] = -1;
+					printf("(%d, %d)", x, y);
+					cnt++;
 				}
-				else if (dir == 1) {
-					x -= 1;
+				else {
+					d = 0;
+					roundCnt++;
 				}
-				else if (dir == 2) {
-					x += 1;
+			}
+			else {
+				d = 0;
+				roundCnt++;
+			}
+		}
+		else if (d == 2) {
+			if (x + 1 < m) {
+				if (coord[x + 1][y] == 0) {
+					d = 1;
+					x++;
+					coord[x][y] = -1;
+					printf("(%d, %d)", x, y);
+					cnt++;
 				}
-				else if (dir == 3) {
-					y += 1;
+				else {
+					d = 1;
+					roundCnt++;
 				}
-
-				if (!(0 <= x && x < n || 0 <= y && y < m)) {
-					break;
+			}
+			else {
+				d = 1;
+				roundCnt++;
+			}
+		}
+		else if (d == 3) {
+			if (y - 1 >= 0) {
+				if (coord[x][y - 1] == 0) {
+					d = 2;
+					y--;
+					coord[x][y - 1] = -1;
+					printf("(%d, %d)", x, y);
+					cnt++;
 				}
+				else {
+					d = 2;
+					roundCnt++;
+				}
+			}
+			else {
+				d = 2;
+				roundCnt++;
 			}
 		}
 	}
