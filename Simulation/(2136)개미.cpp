@@ -37,7 +37,6 @@ t는 가장 마지막에 떨어지는 개미가 바닥에 떨어지는 시간이다.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <map>
 #include <algorithm>
 #pragma warning(disable: 4996)
 
@@ -46,24 +45,20 @@ using namespace std;
 int main() {
 
 	int n, l;
-	map<int, int> ants; // key pair array로 바꾸자
-	map<int, int>::iterator it;
-	int lastTime = 0, d, leftCnt = 0, rightCnt = 0, cnt = 0;
+	pair<int, int> ants[100000];
+	int lastTime = 0, d, leftCnt = 0, rightCnt = 0;
 	
 	scanf("%d %d", &n, &l);
 
-	for (int i = 1; i <= n; i++) {
-		scanf("%d", &ants[i]);
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &ants[i].first);
+		ants[i].second = i + 1;
 	}
 
-	for (it = ants.begin(); it != ants.end(); it++) {
-		printf("%d %d\n", it->first, it->second);
-	}
-
-	for (int i = 1; i <= n; i++) {
-		if (ants[i] > 0) { // 개미가 오른쪽 방향일 떄
-			if (l - ants[i] > lastTime) {
-				lastTime = l - ants[i]; // 떨어지는데 걸리는 시간은 (l - ants[i]) 초
+	for (int i = 0; i < n; i++) {
+		if (ants[i].first > 0) { // 개미가 오른쪽 방향일 떄
+			if (l - ants[i].first > lastTime) {
+				lastTime = l - ants[i].first; // 떨어지는데 걸리는 시간은 (l - ants[i]) 초
 				d = 1; // 마지막 개미 오른쪽 방향으로 저장
 			}
 
@@ -71,21 +66,22 @@ int main() {
 		}
 
 		else {
-			if (ants[i] > lastTime) { // 개미가 왼쪽 방향일 때
-				lastTime = -ants[i]; // 떨어지는데 걸리는 시간은 (-ants[i]) 초
-				ants[i] = -ants[i];
+			if (-ants[i].first > lastTime) { // 개미가 왼쪽 방향일 때
+				lastTime = -ants[i].first; // 떨어지는데 걸리는 시간은 (-ants[i]) 초
 				d = -1; // 마지막 개미 왼쪽 방향으로 저장
 			}
 
+			ants[i].first = -ants[i].first; // 양수 값으로 변환
 			leftCnt++; // 왼쪽 방향 개미 증가
 		}
 	}
-
+	sort(ants, ants + n); // position 값 오름차순 기준으로 순번 정렬
+	
 	if (d == 1) { // 마지막에 떨어지는 개미가 오른쪽 방향이면
-		printf("%d %d", ants[n-rightCnt], lastTime);
+		printf("%d %d", ants[n - rightCnt].second, lastTime);
 	}
 	else { // 마지막에 떨어지는 개미가 왼쪽 방향이면
-		printf("%d %d", ants[leftCnt], lastTime);
+		printf("%d %d", ants[leftCnt - 1].second, lastTime);
 	}
 
 	return 0;
